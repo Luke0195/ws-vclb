@@ -1,5 +1,6 @@
 package br.com.dscatalog.application.services.implementations;
 
+import br.com.dscatalog.application.dtos.CategoryDto;
 import br.com.dscatalog.application.entities.Category;
 import br.com.dscatalog.application.repositories.CategoryRepository;
 import br.com.dscatalog.application.services.usecases.CategoryUseCases;
@@ -24,7 +25,8 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
+    public List<CategoryDto> findAll() {
+       List<Category> entitiesCategories = categoryRepository.findAll();
+       return entitiesCategories.stream().map(CategoryDto::new).toList();
     }
 }

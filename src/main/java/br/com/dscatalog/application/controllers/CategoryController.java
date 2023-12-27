@@ -1,5 +1,6 @@
 package br.com.dscatalog.application.controllers;
 
+import br.com.dscatalog.application.dtos.CategoryDto;
 import br.com.dscatalog.application.entities.Category;
 import br.com.dscatalog.application.services.implementations.CategoryUseCaseImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class CategoryController {
         this.categoryImplementation = implementation;
     }
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategories(){
+    public ResponseEntity<List<CategoryDto>> getAllCategories(){
         return ResponseEntity.status(HttpStatus.OK).body(categoryImplementation.findAll());
     }
 }
