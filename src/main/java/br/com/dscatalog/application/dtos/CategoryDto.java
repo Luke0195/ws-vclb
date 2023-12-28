@@ -6,7 +6,7 @@ import java.util.Objects;
 public class CategoryDto implements Serializable {
 
     private Long id;
-    @NotBlank(message="The field name is required")
+    @NotBlank(message="The field name must be required")
     private String name;
 
 
