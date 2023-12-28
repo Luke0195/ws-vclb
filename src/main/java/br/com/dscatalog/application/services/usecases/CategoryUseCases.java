@@ -6,6 +6,6 @@ import br.com.dscatalog.application.entities.Category;
 import java.util.List;
 
 public interface CategoryUseCases {
-    Category create(Category  category);
+    CategoryDto create(CategoryDto  dto);
     List<CategoryDto> findAll();
 }
