@@ -2,6 +2,7 @@ package br.com.dscatalog.application.services.implementations;
 
 import br.com.dscatalog.application.dtos.CategoryDto;
 import br.com.dscatalog.application.entities.Category;
+import br.com.dscatalog.application.mappers.CategoryMapper;
 import br.com.dscatalog.application.repositories.CategoryRepository;
 import br.com.dscatalog.application.services.exceptions.ResourceAlreadyExists;
 import br.com.dscatalog.application.services.exceptions.ResourceNotExists;
@@ -28,17 +29,16 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
         if(categoryAlreadyExists.isPresent()){
             throw new ResourceAlreadyExists("This category already exists");
         }
-        Category category = new Category();
-        category.setName(dto.getName());
+        Category category = CategoryMapper.parseDtoToCategory(dto);
         category = categoryRepository.save(category);
-        return new CategoryDto(category);
+        return CategoryMapper.parseEntityToDto(category);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CategoryDto> findAll() {
        List<Category> entitiesCategories = categoryRepository.findAll();
-       return entitiesCategories.stream().map(CategoryDto::new).toList();
+       return entitiesCategories.stream().map(CategoryMapper::parseEntityToDto).toList();
     }
 
     @Override
@@ -46,6 +46,6 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
     public CategoryDto findById(Long id) {
        Optional<Category> categoryAlreadyExists =  categoryRepository.findById(id);
        Category category = categoryAlreadyExists.orElseThrow(() -> new ResourceNotExists("No category was found for Id:" + id + "!"));
-       return new CategoryDto(category);
+       return CategoryMapper.parseEntityToDto(category);
     }
 }
