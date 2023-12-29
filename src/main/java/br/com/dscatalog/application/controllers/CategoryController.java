@@ -14,7 +14,6 @@ import java.util.List;
 @RequestMapping(value="/categories")
 public class CategoryController {
     private final CategoryUseCaseImplementation categoryImplementation;
-
     @Autowired
     public CategoryController(CategoryUseCaseImplementation implementation){
         this.categoryImplementation = implementation;
@@ -23,12 +22,10 @@ public class CategoryController {
     public ResponseEntity<List<CategoryDto>> getAllCategories(){
         return ResponseEntity.status(HttpStatus.OK).body(categoryImplementation.findAll());
     }
-
     @GetMapping(value = "/{id}")
     public ResponseEntity<CategoryDto> categoryById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(categoryImplementation.findById(id));
     }
-
     @PostMapping
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryImplementation.create(dto));

@@ -5,7 +5,6 @@ import br.com.dscatalog.application.entities.Category;
 
 public class CategoryMapper {
     private CategoryMapper(){}
-
     public static CategoryDto parseEntityToDto(Category entity){
         CategoryDto dto = new CategoryDto();
         dto.setName(entity.getName());
