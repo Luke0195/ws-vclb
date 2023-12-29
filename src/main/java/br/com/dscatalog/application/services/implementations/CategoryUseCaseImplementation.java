@@ -4,6 +4,7 @@ import br.com.dscatalog.application.dtos.CategoryDto;
 import br.com.dscatalog.application.entities.Category;
 import br.com.dscatalog.application.repositories.CategoryRepository;
 import br.com.dscatalog.application.services.exceptions.ResourceAlreadyExists;
+import br.com.dscatalog.application.services.exceptions.ResourceNotExists;
 import br.com.dscatalog.application.services.usecases.CategoryUseCases;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,16 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
         this.categoryRepository = repository;
     }
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public CategoryDto create(CategoryDto dto) {
         var categoryAlreadyExists = categoryRepository.findByName(dto.getName());
         if(categoryAlreadyExists.isPresent()){
             throw new ResourceAlreadyExists("This category already exists");
         }
-
-        return null;
+        Category category = new Category();
+        category.setName(dto.getName());
+        category = categoryRepository.save(category);
+        return new CategoryDto(category);
     }
 
     @Override
@@ -36,5 +39,13 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
     public List<CategoryDto> findAll() {
        List<Category> entitiesCategories = categoryRepository.findAll();
        return entitiesCategories.stream().map(CategoryDto::new).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CategoryDto findById(Long id) {
+       Optional<Category> categoryAlreadyExists =  categoryRepository.findById(id);
+       Category category = categoryAlreadyExists.orElseThrow(() -> new ResourceNotExists("No category was found for Id:" + id + "!"));
+       return new CategoryDto(category);
     }
 }

@@ -24,6 +24,11 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.OK).body(categoryImplementation.findAll());
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CategoryDto> categoryById(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(categoryImplementation.findById(id));
+    }
+
     @PostMapping
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryImplementation.create(dto));

@@ -1,6 +1,7 @@
 package br.com.dscatalog.application.controllers.exceptions;
 
 import br.com.dscatalog.application.services.exceptions.ResourceAlreadyExists;
+import br.com.dscatalog.application.services.exceptions.ResourceNotExists;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,18 @@ public class ControllerExceptionHandler {
             String fieldMessage = fieldError.getDefaultMessage();
             responseData.getFields().add( new FieldValidation(fieldName, fieldMessage));
         });
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
     }
+
+    @ExceptionHandler(ResourceNotExists.class)
+    public ResponseEntity<StandardError> entityNotFound(HttpServletRequest request, ResourceNotExists exception){
+        StandardError responseData = new StandardError();
+        responseData.setTimestamp(Instant.now());
+        responseData.setStatus(HttpStatus.NOT_FOUND.value());
+        responseData.setError(exception.getMessage());
+        responseData.setPath(request.getRequestURI());
+        responseData.setMessage("Entity not found!");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+    }
+
 }
