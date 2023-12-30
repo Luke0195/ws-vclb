@@ -35,4 +35,12 @@ public class CategoryController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
     }
+
+
+    @PutMapping(value="/{id}")
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id , @Valid @RequestBody CategoryDto dto){
+      dto = categoryImplementation.updateCategory(id, dto);
+      return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
 }

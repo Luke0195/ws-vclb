@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -47,5 +48,23 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
        Optional<Category> categoryAlreadyExists =  categoryRepository.findById(id);
        Category category = categoryAlreadyExists.orElseThrow(() -> new ResourceNotExists("No category was found for Id:" + id + "!"));
        return CategoryMapper.parseEntityToDto(category);
+    }
+
+    @Override
+    @Transactional
+    public CategoryDto updateCategory(Long id, CategoryDto dto) {
+      Category category = categoryRepository.getReferenceById(id);
+      if(Objects.isNull(category.getId())) throw new ResourceNotExists("Id not found: " + id);
+      Optional<Category> categoryAlreadyExists = categoryRepository.findByName(dto.getName());
+      if(categoryAlreadyExists.isPresent()){
+          throw new ResourceNotExists("This category name is already taken!");
+      }
+      parseDtoToEntity(category, dto);
+      category = categoryRepository.save(category);
+      return CategoryMapper.parseEntityToDto(category);
+    }
+
+    private void parseDtoToEntity(Category category, CategoryDto dto){
+        category.setName(dto.getName());
     }
 }
