@@ -7,6 +7,7 @@ import java.util.List;
 public interface LogMessageUseCase {
 
     LogMessageDto create(LogMessageDto dto);
+
     List<LogMessageDto> findAll();
 
     LogMessageDto findErrorMessageById(Long id);

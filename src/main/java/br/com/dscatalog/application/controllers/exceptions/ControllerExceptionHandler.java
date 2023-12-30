@@ -20,18 +20,19 @@ public class ControllerExceptionHandler {
     private final LogMessageUseCaseImplementation implementation;
 
     @Autowired
-    public ControllerExceptionHandler(LogMessageUseCaseImplementation implementation){
+    public ControllerExceptionHandler(LogMessageUseCaseImplementation implementation) {
         this.implementation = implementation;
     }
+
     @ExceptionHandler(ResourceAlreadyExists.class)
-    public ResponseEntity<StandardError> handleEntityAlreadyExists(HttpServletRequest request, ResourceAlreadyExists exception){
+    public ResponseEntity<StandardError> handleEntityAlreadyExists(HttpServletRequest request, ResourceAlreadyExists exception) {
         StandardError responseData = new StandardError();
         responseData.setTimestamp(Instant.now());
         responseData.setStatus(HttpStatus.BAD_REQUEST.value());
         responseData.setError(exception.getMessage());
         responseData.setPath(request.getRequestURI());
         responseData.setMessage("This entity already exists");
-        LogMessageDto dto  = new LogMessageDto();
+        LogMessageDto dto = new LogMessageDto();
         dto.setCreatedAt(Instant.now());
         dto.setDescription(exception.getMessage());
         dto.setEndpoint(request.getRequestURI());
@@ -40,7 +41,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<StandardError> handleFieldValidationError(HttpServletRequest request, MethodArgumentNotValidException exception ){
+    public ResponseEntity<StandardError> handleFieldValidationError(HttpServletRequest request, MethodArgumentNotValidException exception) {
         StandardError responseData = new StandardError();
         responseData.setTimestamp(Instant.now());
         responseData.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -51,27 +52,26 @@ public class ControllerExceptionHandler {
         exception.getFieldErrors().forEach(fieldError -> {
             String fieldName = fieldError.getField();
             String fieldMessage = fieldError.getDefaultMessage();
-            responseData.getFields().add( new FieldValidation(fieldName, fieldMessage));
+            responseData.getFields().add(new FieldValidation(fieldName, fieldMessage));
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
     }
 
     @ExceptionHandler(ResourceNotExists.class)
-    public ResponseEntity<StandardError>handleEntityNotFound(HttpServletRequest request, ResourceNotExists exception){
+    public ResponseEntity<StandardError> handleEntityNotFound(HttpServletRequest request, ResourceNotExists exception) {
         StandardError responseData = new StandardError();
         responseData.setTimestamp(Instant.now());
         responseData.setStatus(HttpStatus.NOT_FOUND.value());
         responseData.setError(exception.getMessage());
         responseData.setPath(request.getRequestURI());
         responseData.setMessage("Entity not found!");
-        LogMessageDto dto  = new LogMessageDto();
+        LogMessageDto dto = new LogMessageDto();
         dto.setCreatedAt(Instant.now());
         dto.setDescription(exception.getMessage());
         dto.setEndpoint(request.getRequestURI());
         this.implementation.create(dto);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
     }
-
 
 
 }

@@ -13,23 +13,27 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="/categories")
+@RequestMapping(value = "/categories")
 public class CategoryController {
     private final CategoryUseCaseImplementation categoryImplementation;
+
     @Autowired
-    public CategoryController(CategoryUseCaseImplementation implementation){
+    public CategoryController(CategoryUseCaseImplementation implementation) {
         this.categoryImplementation = implementation;
     }
+
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> getAllCategories(){
+    public ResponseEntity<List<CategoryDto>> getAllCategories() {
         return ResponseEntity.status(HttpStatus.OK).body(categoryImplementation.findAll());
     }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<CategoryDto> categoryById(@PathVariable Long id){
+    public ResponseEntity<CategoryDto> categoryById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(categoryImplementation.findById(id));
     }
+
     @PostMapping
-    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto dto){
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto dto) {
         dto = this.categoryImplementation.create(dto);
         // Add location on header request.
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
@@ -37,10 +41,10 @@ public class CategoryController {
     }
 
 
-    @PutMapping(value="/{id}")
-    public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id , @Valid @RequestBody CategoryDto dto){
-      dto = categoryImplementation.updateCategory(id, dto);
-      return ResponseEntity.status(HttpStatus.OK).body(dto);
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDto dto) {
+        dto = categoryImplementation.updateCategory(id, dto);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
 }

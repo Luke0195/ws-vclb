@@ -7,19 +7,23 @@ import java.time.Instant;
 
 
 @Entity
-@Table(name="tb_log_message")
+@Table(name = "tb_log_message")
 public class LogMessage implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private Instant createdAt;
-    private String  endpoint;
-    public LogMessage(){};
+    private String endpoint;
 
-    public LogMessage(Long id, String description, Instant createdAt, String endpoint){
+    public LogMessage() {
+    }
+
+    ;
+
+    public LogMessage(Long id, String description, Instant createdAt, String endpoint) {
         this.id = id;
         this.description = description;
         this.createdAt = createdAt;

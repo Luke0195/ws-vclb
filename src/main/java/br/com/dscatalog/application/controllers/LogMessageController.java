@@ -16,18 +16,19 @@ import java.util.List;
 @RequestMapping(value = "/logs")
 public class LogMessageController {
     private final LogMessageUseCaseImplementation logMessageUseCaseImplementation;
+
     @Autowired
-    public LogMessageController(LogMessageUseCaseImplementation logMessageUseCaseImplementation){
+    public LogMessageController(LogMessageUseCaseImplementation logMessageUseCaseImplementation) {
         this.logMessageUseCaseImplementation = logMessageUseCaseImplementation;
     }
 
     @GetMapping
-    public ResponseEntity<List<LogMessageDto>> findAll(){
+    public ResponseEntity<List<LogMessageDto>> findAll() {
         return ResponseEntity.status(HttpStatus.OK).body(logMessageUseCaseImplementation.findAll());
     }
 
-    @GetMapping(value="/{id}")
-    public ResponseEntity<LogMessageDto> findById(@PathVariable Long id){
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<LogMessageDto> findById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(logMessageUseCaseImplementation.findErrorMessageById(id));
     }
 }

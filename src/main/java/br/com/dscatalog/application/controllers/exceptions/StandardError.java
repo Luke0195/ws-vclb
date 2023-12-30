@@ -17,9 +17,10 @@ public class StandardError implements Serializable {
     @JsonProperty("error_fields")
     private List<FieldValidation> fields = new ArrayList<>();
 
-    public StandardError(){}
+    public StandardError() {
+    }
 
-    public StandardError(Instant timestamp, Integer status, String error, String path, String message){
+    public StandardError(Instant timestamp, Integer status, String error, String path, String message) {
         this.timestamp = timestamp;
         this.status = status;
         this.error = error;

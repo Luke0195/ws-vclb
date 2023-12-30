@@ -12,9 +12,10 @@ public class FieldValidation implements Serializable {
     @JsonProperty("field_description")
     private String fieldDescription;
 
-    public FieldValidation(){}
+    public FieldValidation() {
+    }
 
-    public FieldValidation(String fieldName, String fieldDescription){
+    public FieldValidation(String fieldName, String fieldDescription) {
         this.fieldName = fieldName;
         this.fieldDescription = fieldDescription;
     }

@@ -1,23 +1,27 @@
 package br.com.dscatalog.application.dtos;
+
 import br.com.dscatalog.application.entities.Category;
 import jakarta.validation.constraints.NotBlank;
+
 import java.io.Serializable;
 import java.util.Objects;
+
 public class CategoryDto implements Serializable {
 
     private Long id;
-    @NotBlank(message="The field name must be required and cannot be empty!")
+    @NotBlank(message = "The field name must be required and cannot be empty!")
     private String name;
 
 
-    public CategoryDto(){}
+    public CategoryDto() {
+    }
 
-    public CategoryDto(Long id, String name){
+    public CategoryDto(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public CategoryDto(Category entity){
+    public CategoryDto(Category entity) {
         this.id = entity.getId();
         this.name = entity.getName();
     }
@@ -25,6 +29,7 @@ public class CategoryDto implements Serializable {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }

@@ -4,14 +4,17 @@ import br.com.dscatalog.application.dtos.CategoryDto;
 import br.com.dscatalog.application.entities.Category;
 
 public class CategoryMapper {
-    private CategoryMapper(){}
-    public static CategoryDto parseEntityToDto(Category entity){
+    private CategoryMapper() {
+    }
+
+    public static CategoryDto parseEntityToDto(Category entity) {
         CategoryDto dto = new CategoryDto();
         dto.setName(entity.getName());
         dto.setId(entity.getId());
         return dto;
     }
-    public static Category parseDtoToCategory(CategoryDto dto){
+
+    public static Category parseDtoToCategory(CategoryDto dto) {
         Category category = new Category();
         category.setName(dto.getName());
         return category;

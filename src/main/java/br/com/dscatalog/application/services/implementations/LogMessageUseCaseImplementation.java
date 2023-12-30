@@ -16,20 +16,21 @@ import java.util.Optional;
 public class LogMessageUseCaseImplementation implements LogMessageUseCase {
     private final LogMessageRepository repository;
 
-    public LogMessageUseCaseImplementation(LogMessageRepository logMessageRepository){
+    public LogMessageUseCaseImplementation(LogMessageRepository logMessageRepository) {
         this.repository = logMessageRepository;
     }
 
     @Override
     @Transactional
     public LogMessageDto create(LogMessageDto dto) {
-       LogMessage entity = LogMessageMapper.parseDtoToEntity(dto);
-       entity = repository.save(entity);
-       return LogMessageMapper.parseEntityToDto(entity);
+        LogMessage entity = LogMessageMapper.parseDtoToEntity(dto);
+        entity = repository.save(entity);
+        return LogMessageMapper.parseEntityToDto(entity);
     }
+
     @Override
     public List<LogMessageDto> findAll() {
-        List<LogMessage> entities =  repository.findAll();
+        List<LogMessage> entities = repository.findAll();
         return entities.stream().map(LogMessageMapper::parseEntityToDto).toList();
     }
 

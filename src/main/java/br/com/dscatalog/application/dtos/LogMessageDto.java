@@ -12,10 +12,12 @@ public class LogMessageDto implements Serializable {
     private String description;
     @JsonProperty("created_at")
     private Instant createdAt;
-    private String  endpoint;
-    public LogMessageDto(){}
+    private String endpoint;
 
-    public LogMessageDto(Long id, String description, Instant createdAt, String endpoint){
+    public LogMessageDto() {
+    }
+
+    public LogMessageDto(Long id, String description, Instant createdAt, String endpoint) {
         this.id = id;
         this.description = description;
         this.createdAt = createdAt;

@@ -19,15 +19,17 @@ import java.util.Optional;
 @Service
 public class CategoryUseCaseImplementation implements CategoryUseCases {
     private final CategoryRepository categoryRepository;
+
     @Autowired
-    public CategoryUseCaseImplementation(CategoryRepository repository){
+    public CategoryUseCaseImplementation(CategoryRepository repository) {
         this.categoryRepository = repository;
     }
+
     @Override
     @Transactional
     public CategoryDto create(CategoryDto dto) {
         var categoryAlreadyExists = categoryRepository.findByName(dto.getName());
-        if(categoryAlreadyExists.isPresent()){
+        if (categoryAlreadyExists.isPresent()) {
             throw new ResourceAlreadyExists("This category already exists");
         }
         Category category = CategoryMapper.parseDtoToCategory(dto);
@@ -38,33 +40,33 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
     @Override
     @Transactional(readOnly = true)
     public List<CategoryDto> findAll() {
-       List<Category> entitiesCategories = categoryRepository.findAll();
-       return entitiesCategories.stream().map(CategoryMapper::parseEntityToDto).toList();
+        List<Category> entitiesCategories = categoryRepository.findAll();
+        return entitiesCategories.stream().map(CategoryMapper::parseEntityToDto).toList();
     }
 
     @Override
     @Transactional(readOnly = true)
     public CategoryDto findById(Long id) {
-       Optional<Category> categoryAlreadyExists =  categoryRepository.findById(id);
-       Category category = categoryAlreadyExists.orElseThrow(() -> new ResourceNotExists("No category was found for Id:" + id + "!"));
-       return CategoryMapper.parseEntityToDto(category);
+        Optional<Category> categoryAlreadyExists = categoryRepository.findById(id);
+        Category category = categoryAlreadyExists.orElseThrow(() -> new ResourceNotExists("No category was found for Id:" + id + "!"));
+        return CategoryMapper.parseEntityToDto(category);
     }
 
     @Override
     @Transactional
     public CategoryDto updateCategory(Long id, CategoryDto dto) {
-      Category category = categoryRepository.getReferenceById(id);
-      if(Objects.isNull(category.getId())) throw new ResourceNotExists("Id not found: " + id);
-      Optional<Category> categoryAlreadyExists = categoryRepository.findByName(dto.getName());
-      if(categoryAlreadyExists.isPresent()){
-          throw new ResourceNotExists("This category name is already taken!");
-      }
-      parseDtoToEntity(category, dto);
-      category = categoryRepository.save(category);
-      return CategoryMapper.parseEntityToDto(category);
+        Category category = categoryRepository.getReferenceById(id);
+        if (Objects.isNull(category.getId())) throw new ResourceNotExists("Id not found: " + id);
+        Optional<Category> categoryAlreadyExists = categoryRepository.findByName(dto.getName());
+        if (categoryAlreadyExists.isPresent()) {
+            throw new ResourceNotExists("This category name is already taken!");
+        }
+        parseDtoToEntity(category, dto);
+        category = categoryRepository.save(category);
+        return CategoryMapper.parseEntityToDto(category);
     }
 
-    private void parseDtoToEntity(Category category, CategoryDto dto){
+    private void parseDtoToEntity(Category category, CategoryDto dto) {
         category.setName(dto.getName());
     }
 }
