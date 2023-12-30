@@ -4,11 +4,14 @@ import br.com.dscatalog.application.dtos.CategoryDto;
 import br.com.dscatalog.application.entities.Category;
 import br.com.dscatalog.application.mappers.CategoryMapper;
 import br.com.dscatalog.application.repositories.CategoryRepository;
+import br.com.dscatalog.application.services.exceptions.DatabaseException;
 import br.com.dscatalog.application.services.exceptions.ResourceAlreadyExists;
 import br.com.dscatalog.application.services.exceptions.ResourceNotExists;
 import br.com.dscatalog.application.services.usecases.CategoryUseCases;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +69,18 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
         return CategoryMapper.parseEntityToDto(category);
     }
 
+    @Override
+    public void delete(Long id) { // We cannot use @Transactional on delete operation because we cannot get access to exception .
+        try{
+            var categoryAlreadyExists = categoryRepository.findById(id);
+            if(categoryAlreadyExists.isEmpty()) throw new ResourceNotExists("Id not found!");
+            categoryRepository.deleteById(id);
+        }catch(EmptyResultDataAccessException e){
+            throw new ResourceNotExists("Id not found!");
+        }catch (DataIntegrityViolationException e){
+            throw new DatabaseException("Integrate Violation");
+        }
+    }
     private void parseDtoToEntity(Category category, CategoryDto dto) {
         category.setName(dto.getName());
     }

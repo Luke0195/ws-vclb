@@ -1,6 +1,7 @@
 package br.com.dscatalog.application.controllers.exceptions;
 
 import br.com.dscatalog.application.dtos.LogMessageDto;
+import br.com.dscatalog.application.services.exceptions.DatabaseException;
 import br.com.dscatalog.application.services.exceptions.ResourceAlreadyExists;
 import br.com.dscatalog.application.services.exceptions.ResourceNotExists;
 import br.com.dscatalog.application.services.implementations.LogMessageUseCaseImplementation;
@@ -71,6 +72,18 @@ public class ControllerExceptionHandler {
         dto.setEndpoint(request.getRequestURI());
         this.implementation.create(dto);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+    }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<StandardError> handleIntegrateViolation(HttpServletRequest request, DatabaseException e ){
+        StandardError responseData = new StandardError();
+        responseData.setTimestamp(Instant.now());
+        responseData.setStatus(HttpStatus.BAD_REQUEST.value());
+        responseData.setError(e.getMessage());
+        responseData.setPath(request.getRequestURI());
+        responseData.setMessage("Database Exception!");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+
     }
 
 
