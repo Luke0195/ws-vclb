@@ -1,7 +1,6 @@
 package br.com.dscatalog.application.entities;
 
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.util.Objects;
 
