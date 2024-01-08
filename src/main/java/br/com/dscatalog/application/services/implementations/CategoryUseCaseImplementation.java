@@ -12,6 +12,8 @@ import br.com.dscatalog.application.services.usecases.CategoryUseCases;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,9 +44,8 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CategoryDto> findAll() {
-        List<Category> entitiesCategories = categoryRepository.findAll();
-        return entitiesCategories.stream().map(CategoryMapper::parseEntityToDto).toList();
+    public Page<CategoryDto> findAll(PageRequest pageRequest) {
+      return categoryRepository.findAll(pageRequest).map(CategoryMapper::parseEntityToDto);
     }
 
     @Override
