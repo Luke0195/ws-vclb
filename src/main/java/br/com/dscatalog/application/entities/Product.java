@@ -98,6 +98,13 @@ public class Product implements Serializable {
         return updatedAt;
     }
 
+    public Instant getDate() {
+        return date;
+    }
+
+    public void setDate(Instant date) {
+        this.date = date;
+    }
 
     @PrePersist
     public void prePersist(){
