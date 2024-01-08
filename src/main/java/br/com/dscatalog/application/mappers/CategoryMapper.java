@@ -11,6 +11,8 @@ public class CategoryMapper {
         CategoryDto dto = new CategoryDto();
         dto.setName(entity.getName());
         dto.setId(entity.getId());
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
         return dto;
     }
 

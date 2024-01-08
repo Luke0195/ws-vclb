@@ -1,9 +1,12 @@
 package br.com.dscatalog.application.dtos;
 
 import br.com.dscatalog.application.entities.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
 public class CategoryDto implements Serializable {
@@ -12,6 +15,11 @@ public class CategoryDto implements Serializable {
     @NotBlank(message = "The field name must be required and cannot be empty!")
     private String name;
 
+    @JsonProperty("created_at")
+    private Instant createdAt;
+    @JsonProperty("updated_at")
+
+    private Instant updatedAt;
 
     public CategoryDto() {
     }
@@ -40,6 +48,22 @@ public class CategoryDto implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
