@@ -15,7 +15,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class ControllerExceptionHandler {
     public ResponseEntity<StandardError> handleEntityAlreadyExists(HttpServletRequest request, ResourceAlreadyExists exception) {
         StandardError responseData = StandardErrorMapper.makeStandardError(
                 BAD_REQUEST, exception.getMessage(), request.getRequestURI(),
-                "This entity already exists",null);
+                "This entity already exists", null);
         LogMessageDto dto = LogMessageMapper.makeLogMessage(exception.getMessage(), request.getRequestURI());
         this.implementation.create(dto);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
@@ -47,9 +46,9 @@ public class ControllerExceptionHandler {
             String fieldMessage = fieldError.getDefaultMessage();
             fieldValidations.add(new FieldValidation(fieldName, fieldMessage));
         });
-        StandardError responseData =  StandardErrorMapper.makeStandardError(
+        StandardError responseData = StandardErrorMapper.makeStandardError(
                 BAD_REQUEST, exception.getMessage(), request.getRequestURI(),
-                "Please check the errors fields keys",fieldValidations);
+                "Please check the errors fields keys", fieldValidations);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
     }
 
@@ -67,7 +66,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(DatabaseException.class)
-    public ResponseEntity<StandardError> handleIntegrateViolation(HttpServletRequest request, DatabaseException e ){
+    public ResponseEntity<StandardError> handleIntegrateViolation(HttpServletRequest request, DatabaseException e) {
         StandardError responseData = StandardErrorMapper.makeStandardError(
                 BAD_REQUEST,
                 e.getMessage(),

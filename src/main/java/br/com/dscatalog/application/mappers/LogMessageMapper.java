@@ -27,7 +27,7 @@ public class LogMessageMapper {
         return entity;
     }
 
-    public static LogMessageDto makeLogMessage(String description, String endpoint){
+    public static LogMessageDto makeLogMessage(String description, String endpoint) {
         LogMessageDto dto = new LogMessageDto();
         dto.setDescription(description);
         dto.setEndpoint(endpoint);

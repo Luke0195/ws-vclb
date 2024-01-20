@@ -6,15 +6,17 @@ import br.com.dscatalog.application.entities.Product;
 import br.com.dscatalog.application.mappers.ProductMapper;
 import br.com.dscatalog.application.repositories.CategoryRepository;
 import br.com.dscatalog.application.repositories.ProductRepository;
+import br.com.dscatalog.application.services.exceptions.ResourceAlreadyExists;
 import br.com.dscatalog.application.services.exceptions.ResourceNotExists;
 import br.com.dscatalog.application.services.usecases.ProductUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -24,15 +26,15 @@ public class ProductUseCaseImplementation implements ProductUseCase {
     private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductUseCaseImplementation(ProductRepository repository, CategoryRepository categoryRepository){
+    public ProductUseCaseImplementation(ProductRepository repository, CategoryRepository categoryRepository) {
         this.productRepository = repository;
         this.categoryRepository = categoryRepository;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProductDto> findAllPaged(PageRequest pageRequest){
-     return productRepository.findAll(pageRequest).map(ProductMapper::parseEntityToDto);
+    public Page<ProductDto> findAllPaged(Pageable pageable) {
+        return productRepository.findAll(pageable).map(ProductMapper::parseEntityToDto);
     }
 
     @Override
@@ -41,5 +43,37 @@ public class ProductUseCaseImplementation implements ProductUseCase {
         Optional<Product> productAlreadyExists = productRepository.findById(id);
         Product product = productAlreadyExists.orElseThrow(() -> new ResourceNotExists("Product not found!"));
         return ProductMapper.parseEntityToDto(product);
+    }
+
+    @Override
+    @Transactional
+    public ProductDto create(ProductDto dto) {
+        Optional<Product> productAlreadyExists = productRepository.findByName(dto.getName());
+        if (productAlreadyExists.isPresent()) throw new ResourceAlreadyExists("Entity already exists!");
+        Product product = new Product();
+        parseData(product, dto);
+        product = productRepository.save(product);
+        return ProductMapper.parseEntityToDto(product);
+    }
+
+    @Override
+    @Transactional
+    public ProductDto update(Long id, ProductDto dto) {
+        Product productExists = productRepository.getReferenceById(id);
+        if (Objects.isNull(productExists.getId())) throw new ResourceNotExists("This entity was not found!");
+        parseData(productExists, dto);
+        productExists = productRepository.save(productExists);
+        return ProductMapper.parseEntityToDto(productExists);
+    }
+
+    private static void parseData(Product product, ProductDto dto) {
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setImgUrl(dto.getImgUrl());
+        product.setPrice(dto.getPrice());
+        product.setDate(dto.getDate());
+        for (Category category : dto.getCategories()) {
+            product.getCategories().add(new Category(category.getId(), category.getName()));
+        }
     }
 }

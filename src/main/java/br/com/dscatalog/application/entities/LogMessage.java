@@ -21,8 +21,6 @@ public class LogMessage implements Serializable {
     public LogMessage() {
     }
 
-    ;
-
     public LogMessage(Long id, String description, Instant createdAt, String endpoint) {
         this.id = id;
         this.description = description;

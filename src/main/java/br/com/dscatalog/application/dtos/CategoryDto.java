@@ -1,7 +1,6 @@
 package br.com.dscatalog.application.dtos;
 
 import br.com.dscatalog.application.entities.Category;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 

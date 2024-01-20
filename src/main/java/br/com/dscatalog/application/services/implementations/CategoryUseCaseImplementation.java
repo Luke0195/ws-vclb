@@ -17,7 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -45,7 +45,7 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
     @Override
     @Transactional(readOnly = true)
     public Page<CategoryDto> findAll(PageRequest pageRequest) {
-      return categoryRepository.findAll(pageRequest).map(CategoryMapper::parseEntityToDto);
+        return categoryRepository.findAll(pageRequest).map(CategoryMapper::parseEntityToDto);
     }
 
     @Override
@@ -72,16 +72,17 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
 
     @Override
     public void delete(Long id) { // We cannot use @Transactional on delete operation because we cannot get access to exception .
-        try{
+        try {
             var categoryAlreadyExists = categoryRepository.findById(id);
-            if(categoryAlreadyExists.isEmpty()) throw new ResourceNotExists("Id not found!");
+            if (categoryAlreadyExists.isEmpty()) throw new ResourceNotExists("Id not found!");
             categoryRepository.deleteById(id);
-        }catch(EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotExists("Id not found!");
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Integrate Violation");
         }
     }
+
     private void parseDtoToEntity(Category category, CategoryDto dto) {
         category.setName(dto.getName());
     }

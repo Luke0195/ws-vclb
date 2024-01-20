@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/categories")
@@ -27,10 +26,10 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<Page<CategoryDto>> getAllCategories(
-            @RequestParam(value="page", defaultValue = "0") Integer page,
-            @RequestParam(value="linesPerPage", defaultValue = "12") Integer linesPerPage,
-            @RequestParam(value="direction", defaultValue = "DESC") String direction,
-            @RequestParam(value="orderBy", defaultValue = "name") String orderBy
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
+            @RequestParam(value = "direction", defaultValue = "DESC") String direction,
+            @RequestParam(value = "orderBy", defaultValue = "name") String orderBy
     ) {
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         return ResponseEntity.status(HttpStatus.OK).body(categoryImplementation.findAll(pageRequest));
@@ -56,8 +55,8 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
-    @DeleteMapping(value="/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         categoryImplementation.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
