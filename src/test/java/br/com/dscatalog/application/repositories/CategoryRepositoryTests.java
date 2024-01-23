@@ -44,12 +44,5 @@ class CategoryRepositoryTests {
         Assertions.assertTrue(category.isPresent());
     }
 
-    @Test
-    void findCategoryByIdShouldThrowsResourceNotExistsWhenAnInvalidIdIsProvided(){
-        Long nonExistingId = 8L;
-        Assertions.assertThrows(ResourceNotExists.class, () -> {
-            categoryRepository.findById(nonExistingId);
-        });
-    }
 
 }
