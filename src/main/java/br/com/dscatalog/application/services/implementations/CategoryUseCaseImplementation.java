@@ -71,7 +71,7 @@ public class CategoryUseCaseImplementation implements CategoryUseCases {
     }
 
     @Override
-    public void delete(Long id) { // We cannot use @Transactional on delete operation because we cannot get access to exception .
+    public void delete(Long id) throws ResourceNotExists{ // We cannot use @Transactional on delete operation because we cannot get access to exception .
         try {
             var categoryAlreadyExists = categoryRepository.findById(id);
             if (categoryAlreadyExists.isEmpty()) throw new ResourceNotExists("Id not found!");

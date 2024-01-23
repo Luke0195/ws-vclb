@@ -49,6 +49,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
+        productUseCaseImplementation.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

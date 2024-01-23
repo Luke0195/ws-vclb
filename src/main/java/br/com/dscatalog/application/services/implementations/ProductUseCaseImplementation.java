@@ -6,16 +6,21 @@ import br.com.dscatalog.application.entities.Product;
 import br.com.dscatalog.application.mappers.ProductMapper;
 import br.com.dscatalog.application.repositories.CategoryRepository;
 import br.com.dscatalog.application.repositories.ProductRepository;
+import br.com.dscatalog.application.services.exceptions.DatabaseException;
 import br.com.dscatalog.application.services.exceptions.ResourceAlreadyExists;
 import br.com.dscatalog.application.services.exceptions.ResourceNotExists;
 import br.com.dscatalog.application.services.usecases.ProductUseCase;
+import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -64,6 +69,15 @@ public class ProductUseCaseImplementation implements ProductUseCase {
         parseData(productExists, dto);
         productExists = productRepository.save(productExists);
         return ProductMapper.parseEntityToDto(productExists);
+    }
+
+
+    @Override
+    public void delete(Long id){
+        Optional<Product> entityAlreadyExists = productRepository.findById(id);
+        if (entityAlreadyExists.isEmpty()) throw  new ResourceNotExists("Id not found");
+        productRepository.deleteById(entityAlreadyExists.get().getId());
+
     }
 
     private static void parseData(Product product, ProductDto dto) {

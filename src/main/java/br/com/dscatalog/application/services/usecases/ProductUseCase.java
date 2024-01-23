@@ -12,4 +12,6 @@ public interface ProductUseCase {
     ProductDto create(ProductDto dto);
 
     ProductDto update(Long id, ProductDto dto);
+
+    void delete(Long id);
 }
