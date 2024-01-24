@@ -1,8 +1,10 @@
 package br.com.dscatalog.application.repositories;
 
 import br.com.dscatalog.application.entities.Category;
+import br.com.dscatalog.application.factories.CategoryFactory;
 import br.com.dscatalog.application.services.exceptions.ResourceNotExists;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -19,6 +21,17 @@ class CategoryRepositoryTests {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    private  Long existingId;
+    private  String categoryName;
+
+
+    @BeforeEach
+    void setup(){
+        this.existingId = 1L;
+        this.categoryName= "any_name";
+    }
+
+
 
     @Test
     void findAllPagedShouldGetAllUsers(){
@@ -29,19 +42,26 @@ class CategoryRepositoryTests {
 
     @Test
     void createShouldCreateACategoryWhenValidDataIsProvided(){
-        Long createdId = 4L;
-        String createdName = "any_name";
-        Category category = new Category(createdId, createdName);
+        Long expectedId = 4L;
+        String expectedName = "any_name";
+        Category category = CategoryFactory.makeCategoryWithParams(4L, "any_name");
         Assertions.assertNotNull(category);
-        Assertions.assertEquals(createdId, category.getId());
-        Assertions.assertEquals(createdName, category.getName());
+        Assertions.assertEquals(expectedId, category.getId());
+        Assertions.assertEquals(expectedName, category.getName());
     }
 
     @Test
     void findCategoryByIdShouldReturnACategoryWhenAValidIdIsProvided(){
-        Long existingId = 1L;
-        Optional<Category> category = categoryRepository.findById(existingId);
+        Optional<Category> category = categoryRepository.findById(this.existingId);
         Assertions.assertTrue(category.isPresent());
+    }
+
+    @Test
+    void updateCategoryShouldUpdateACategoryWhenAValidDataIsProvided(){
+        Category category = categoryRepository.getReferenceById(this.existingId);
+        category.setName("any_name");
+        category = categoryRepository.save(category);
+        Assertions.assertEquals(this.categoryName, category.getName());
     }
 
 
