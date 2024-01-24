@@ -57,4 +57,16 @@ import java.util.Optional;
         Assertions.assertNotNull(entity);
         Assertions.assertEquals(8, entity.getId());
     }
+
+    @Test
+    void findByIdShouldReturnAnProductWhenAValidIdIsProvided(){
+        Optional<Product> productAlreadyExists = productRepository.findById(this.existingId);
+        Assertions.assertTrue(productAlreadyExists.isPresent());
+    }
+
+    @Test
+    void findByIdShoudReturnEmptyWhenAProductIdWasNotFound(){
+        Optional<Product> product = productRepository.findById(10000L);
+        Assertions.assertFalse(product.isPresent());
+    }
 }

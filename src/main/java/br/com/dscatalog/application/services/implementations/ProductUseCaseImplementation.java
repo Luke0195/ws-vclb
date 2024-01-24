@@ -74,10 +74,13 @@ public class ProductUseCaseImplementation implements ProductUseCase {
 
     @Override
     public void delete(Long id){
-        Optional<Product> entityAlreadyExists = productRepository.findById(id);
-        if (entityAlreadyExists.isEmpty()) throw  new ResourceNotExists("Id not found");
-        productRepository.deleteById(entityAlreadyExists.get().getId());
-
+        try{
+            this.productRepository.deleteById(id);
+        }catch (EmptyResultDataAccessException e ){
+            throw new ResourceNotExists("Id not found");
+        }catch (DatabaseException e){
+            throw new DatabaseException("Integrate violate");
+        }
     }
 
     private static void parseData(Product product, ProductDto dto) {
