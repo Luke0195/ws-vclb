@@ -22,6 +22,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -96,4 +97,14 @@ import java.util.Optional;
         ProductDto dto = productUseCaseImplementation.findById(existingId);
         Assertions.assertNotNull(dto);
     }
+
+    @Test
+    void findAllPageShouldReturnPage(){
+        Pageable pageable = PageRequest.of(0,8);
+        Page<ProductDto> products = productUseCaseImplementation.findAllPaged(pageable);
+        Assertions.assertNotNull(products);
+        Mockito.verify(productRepository, Mockito.times(1)).findAll(pageable);
+    }
+
+
 }
