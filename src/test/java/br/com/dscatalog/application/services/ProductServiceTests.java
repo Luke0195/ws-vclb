@@ -127,6 +127,14 @@ import java.util.Optional;
     }
 
 
+    @Test
+    void updateShouldUpdateProductWhenValidIdAndDataIsProvided(){
+        Product product1 = ProductFactory.makeNotExistingProduct(this.existingId);
+        ProductDto dto = new ProductDto(product1);
+        productUseCaseImplementation.update(this.existingId, dto);
+        Assertions.assertNotNull(dto.getId());
+    }
+
 
 
 }

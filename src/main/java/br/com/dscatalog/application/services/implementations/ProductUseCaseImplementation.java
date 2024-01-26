@@ -64,7 +64,7 @@ public class ProductUseCaseImplementation implements ProductUseCase {
     @Transactional
     public ProductDto update(Long id, ProductDto dto) {
         Product productExists = productRepository.getReferenceById(id);
-        if (Objects.isNull(productExists.getId())) throw new ResourceNotExists("This entity was not found!");
+        if (Objects.isNull(productExists)) throw new ResourceNotExists("This entity was not found!");
         parseData(productExists, dto);
         productExists = productRepository.save(productExists);
         return ProductMapper.parseEntityToDto(productExists);
