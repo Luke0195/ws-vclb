@@ -2,9 +2,12 @@ package br.com.dscatalog.application.repositories;
 
 import br.com.dscatalog.application.entities.Product;
 import br.com.dscatalog.application.services.exceptions.ResourceNotExists;
+import br.com.dscatalog.application.services.implementations.ProductUseCaseImplementation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -18,7 +21,6 @@ import java.util.Optional;
  class ProductRepositoryTests {
     @Autowired
     private ProductRepository productRepository;
-
     private Long existingId;
     private Long nonExistingId;
 
@@ -37,12 +39,6 @@ import java.util.Optional;
        Assertions.assertFalse(productExists.isPresent());
    }
 
-   /*
-   @Test
-    void deleteShouldThrowResourceNotFoundExceptionWhenAnInvalidIdIsProvided(){
-     Assertions.assertThrows(ResourceNotExists.class, () -> productRepository.deleteById(1000L));
-   }
-    */
 
 
     @Test

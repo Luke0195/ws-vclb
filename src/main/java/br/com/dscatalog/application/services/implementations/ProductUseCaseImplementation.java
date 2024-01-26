@@ -9,10 +9,9 @@ import br.com.dscatalog.application.repositories.ProductRepository;
 import br.com.dscatalog.application.services.exceptions.DatabaseException;
 import br.com.dscatalog.application.services.exceptions.ResourceAlreadyExists;
 import br.com.dscatalog.application.services.exceptions.ResourceNotExists;
+
 import br.com.dscatalog.application.services.usecases.ProductUseCase;
-import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 
@@ -20,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
+
 import java.util.Objects;
 import java.util.Optional;
 
