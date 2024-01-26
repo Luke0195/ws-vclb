@@ -10,7 +10,10 @@ public class ProductFactory {
 
 
     public static Product makeProductWithNoArguments(){
-        return new Product(1L, "any_name",  "any_description", BigDecimal.valueOf(31.50), null);
+        return new Product();
     }
 
+    public static Product makeNotExistingProduct(Long id){
+        return new Product(id,"any_name", "any_description", BigDecimal.valueOf(30.50), null);
+    }
 }

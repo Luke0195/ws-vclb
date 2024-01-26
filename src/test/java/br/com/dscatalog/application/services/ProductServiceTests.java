@@ -26,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +59,8 @@ import java.util.Optional;
         Mockito.doNothing().when(productRepository).deleteById(this.existingId);
         Mockito.doThrow(EmptyResultDataAccessException.class).when(productRepository).deleteById(this.nonExistingId);
         Mockito.doThrow(DataIntegrityViolationException.class).when(productRepository).deleteById(this.dependentId);
+        Mockito.when(productRepository.getReferenceById(this.existingId)).thenReturn(this.product);
+        Mockito.when(productRepository.getReferenceById(this.nonExistingId)).thenThrow(ResourceNotExists.class);
 
 
     }
@@ -105,6 +108,25 @@ import java.util.Optional;
         Assertions.assertNotNull(products);
         Mockito.verify(productRepository, Mockito.times(1)).findAll(pageable);
     }
+
+    @Test
+    void createShouldCreateAProductWhenAValidDataIsProvided(){
+        Product product = ProductFactory.makeNotExistingProduct(this.nonExistingId);
+        ProductDto dto = productUseCaseImplementation.create(new ProductDto(product));
+        Assertions.assertNotNull(dto);
+        productRepository.save(this.product);
+    }
+
+    @Test
+    void updateShouldThrowResourceNotExistsWhenAnInvalidIdIsProvided(){
+        Product product = new Product(this.nonExistingId,"any_name", "any_description", BigDecimal.valueOf(30.50), null);
+        ProductDto dto = new ProductDto(product);
+        Assertions.assertThrows(ResourceNotExists.class, () -> {
+            productUseCaseImplementation.update(this.nonExistingId, dto);
+        });
+    }
+
+
 
 
 }
