@@ -34,14 +34,17 @@ class ProductControllerTests {
     private PageImpl<ProductDto> pageDto;
     private ProductDto productDto;
     private Long nonExistingId;
+    private long existingId;
 
     @BeforeEach
     void setup(){
         this.nonExistingId = 1000000L;
+        this.existingId = 1L;
         this.productDto = new ProductDto(ProductFactory.makeProductWithNoArguments());
         this.pageDto = new PageImpl<>(List.of(this.productDto));
         Mockito.when(productUseCaseImplementation.findAllPaged(ArgumentMatchers.any())).thenReturn(pageDto);
         Mockito.when(productUseCaseImplementation.findById(this.nonExistingId)).thenThrow(ResourceNotExists.class);
+        Mockito.when(productUseCaseImplementation.findById(this.existingId)).thenReturn(productDto);
     }
 
     @Test
@@ -51,9 +54,15 @@ class ProductControllerTests {
     }
 
     @Test
-    void findByIdShouldReturnAProductWhenIdIsValid() throws Exception{
+    void findByIdShouldReturnNotFoundWhenAnInvalidIdIsProvided() throws Exception{
       ResultActions result = mockMvc.perform(get("/products/" +this.nonExistingId));
       result.andExpect(status().isNotFound());
+    }
+
+    @Test
+    void findByIdShouldReturnAProductWhenValidIdIsProvided() throws Exception{
+        ResultActions result = mockMvc.perform(get("/products/"+this.existingId));
+        result.andExpect(status().isOk());
     }
 
 
