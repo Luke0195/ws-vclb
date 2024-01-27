@@ -6,6 +6,7 @@ import br.com.dscatalog.application.mappers.LogMessageMapper;
 import br.com.dscatalog.application.repositories.LogMessageRepository;
 import br.com.dscatalog.application.services.exceptions.ResourceNotExists;
 import br.com.dscatalog.application.services.usecases.LogMessageUseCase;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,11 +15,9 @@ import java.util.Optional;
 
 @Service
 public class LogMessageUseCaseImplementation implements LogMessageUseCase {
-    private final LogMessageRepository repository;
+    @Autowired
+    private LogMessageRepository repository;
 
-    public LogMessageUseCaseImplementation(LogMessageRepository logMessageRepository) {
-        this.repository = logMessageRepository;
-    }
 
     @Override
     @Transactional

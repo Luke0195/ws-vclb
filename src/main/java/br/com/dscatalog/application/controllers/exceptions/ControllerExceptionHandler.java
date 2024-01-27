@@ -21,12 +21,6 @@ import java.util.List;
 @ControllerAdvice
 public class ControllerExceptionHandler {
     private static final Integer BAD_REQUEST = HttpStatus.BAD_REQUEST.value();
-    private final LogMessageUseCaseImplementation implementation;
-
-    @Autowired
-    public ControllerExceptionHandler(LogMessageUseCaseImplementation implementation) {
-        this.implementation = implementation;
-    }
 
     @ExceptionHandler(ResourceAlreadyExists.class)
     public ResponseEntity<StandardError> handleEntityAlreadyExists(HttpServletRequest request, ResourceAlreadyExists exception) {
@@ -34,7 +28,6 @@ public class ControllerExceptionHandler {
                 BAD_REQUEST, exception.getMessage(), request.getRequestURI(),
                 "This entity already exists", null);
         LogMessageDto dto = LogMessageMapper.makeLogMessage(exception.getMessage(), request.getRequestURI());
-        this.implementation.create(dto);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
     }
 
@@ -60,8 +53,6 @@ public class ControllerExceptionHandler {
                 request.getRequestURI(),
                 "Entity Not Found!",
                 null);
-        LogMessageDto dto = LogMessageMapper.makeLogMessage(exception.getMessage(), request.getRequestURI());
-        this.implementation.create(dto);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
     }
 
