@@ -14,6 +14,6 @@ public class ProductFactory {
     }
 
     public static Product makeNotExistingProduct(Long id){
-        return new Product(id,"any_name", "any_description", BigDecimal.valueOf(30.50), null);
+        return new Product(id,"any_name", "any_description", BigDecimal.valueOf(30.50), "any_image");
     }
 }

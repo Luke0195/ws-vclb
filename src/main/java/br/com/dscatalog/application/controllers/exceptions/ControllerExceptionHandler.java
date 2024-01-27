@@ -21,6 +21,7 @@ import java.util.List;
 @ControllerAdvice
 public class ControllerExceptionHandler {
     private static final Integer BAD_REQUEST = HttpStatus.BAD_REQUEST.value();
+    private static final Integer NOT_FOUND = HttpStatus.NOT_FOUND.value();
 
     @ExceptionHandler(ResourceAlreadyExists.class)
     public ResponseEntity<StandardError> handleEntityAlreadyExists(HttpServletRequest request, ResourceAlreadyExists exception) {
@@ -48,7 +49,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(ResourceNotExists.class)
     public ResponseEntity<StandardError> handleEntityNotFound(HttpServletRequest request, ResourceNotExists exception) {
         StandardError responseData = StandardErrorMapper.makeStandardError(
-                BAD_REQUEST,
+                NOT_FOUND,
                 exception.getMessage(),
                 request.getRequestURI(),
                 "Entity Not Found!",
